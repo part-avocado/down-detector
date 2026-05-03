@@ -13,6 +13,12 @@ const STATUS_PAGE_HOMEPAGES: Partial<Record<string, string>> = {
   'github-web':      'https://www.githubstatus.com',
   'github-api':      'https://www.githubstatus.com',
   'gitlab':          'https://status.gitlab.com',
+  'bitbucket':       'https://status.atlassian.com',
+  'atlassian':       'https://status.atlassian.com',
+  'linear':          'https://linearstatus.com',
+  'notion':          'https://www.notion-status.com',
+  'discord':         'https://discordstatus.com',
+  'dropbox':         'https://status.dropbox.com',
   // Cloud Platforms
   'gcp-console':     'https://status.cloud.google.com',
   'googleapis':      'https://status.cloud.google.com',
@@ -21,12 +27,20 @@ const STATUS_PAGE_HOMEPAGES: Partial<Record<string, string>> = {
   'aws':             'https://health.aws.amazon.com',
   'digitalocean':    'https://status.digitalocean.com',
   'hetzner':         'https://status.hetzner.com',
+  'supabase':        'https://status.supabase.com',
+  'planetscale':     'https://planetscalestatus.com',
+  'neon':            'https://neonstatus.com',
+  'mongodb-atlas':   'https://status.mongodb.com',
+  'terraform-registry': 'https://status.hashicorp.com',
   // CDN & Edge
   'cloudflare':      'https://www.cloudflarestatus.com',
   'fastly':          'https://status.fastly.com',
+  'bunny-cdn':       'https://status.bunny.net',
   // DNS & Security
   'cloudflare-dns':  'https://www.cloudflarestatus.com',
   'google-dns':      'https://status.cloud.google.com',
+  // Auth & Identity
+  'okta':            'https://status.okta.com',
   // Payments
   'stripe-api':      'https://status.stripe.com',
   'paypal':          'https://www.paypal-status.com',
@@ -38,8 +52,13 @@ const STATUS_PAGE_HOMEPAGES: Partial<Record<string, string>> = {
   'render':          'https://status.render.com',
   'railway':         'https://status.railway.app',
   'heroku':          'https://status.heroku.com',
+  // Communications
+  'twilio':          'https://status.twilio.com',
+  // Maps
+  'mapbox':          'https://status.mapbox.com',
   // Package Registries
   'npm-registry':    'https://status.npmjs.org',
+  'nuget':           'https://status.nuget.org',
   'pypi':            'https://status.python.org',
   'docker-hub':      'https://www.dockerstatus.com',
   // CI/CD
@@ -51,6 +70,8 @@ const STATUS_PAGE_HOMEPAGES: Partial<Record<string, string>> = {
   'datadog':         'https://status.datadoghq.com',
   'sentry':          'https://status.sentry.io',
   'slack':           'https://status.slack.com',
+  'splunk':          'https://status.splunkcloud.com',
+  'elastic':         'https://status.elastic.co',
   // AI Services
   'openai':          'https://status.openai.com',
   'anthropic':       'https://status.anthropic.com',
@@ -70,13 +91,24 @@ const STATUS_APIS: Partial<Record<string, { url: string; type: ApiType }>> = {
   'github-web':     { url: 'https://www.githubstatus.com/api/v2/summary.json',     type: 'statuspage' },
   'github-api':     { url: 'https://www.githubstatus.com/api/v2/summary.json',     type: 'statuspage' },
   'gitlab':         { url: 'https://status.gitlab.com/api/v2/summary.json',        type: 'statuspage' },
+  'bitbucket':      { url: 'https://status.atlassian.com/api/v2/summary.json',     type: 'statuspage' },
+  'atlassian':      { url: 'https://status.atlassian.com/api/v2/summary.json',     type: 'statuspage' },
+  'linear':         { url: 'https://linearstatus.com/api/v2/summary.json',       type: 'statuspage' },
+  'notion':         { url: 'https://www.notion-status.com/api/v2/summary.json',   type: 'statuspage' },
+  'discord':        { url: 'https://discordstatus.com/api/v2/summary.json',      type: 'statuspage' },
+  'dropbox':        { url: 'https://status.dropbox.com/api/v2/summary.json',     type: 'statuspage' },
   // Cloud Platforms
   'gcp-console':    { url: 'https://status.cloud.google.com/incidents.json',       type: 'gcp' },
   'googleapis':     { url: 'https://status.cloud.google.com/incidents.json',       type: 'gcp' },
   'digitalocean':   { url: 'https://status.digitalocean.com/api/v2/summary.json',  type: 'statuspage' },
+  'supabase':       { url: 'https://status.supabase.com/api/v2/summary.json',      type: 'statuspage' },
+  'planetscale':    { url: 'https://planetscalestatus.com/api/v2/summary.json',    type: 'statuspage' },
+  'mongodb-atlas':  { url: 'https://status.mongodb.com/api/v2/summary.json',       type: 'statuspage' },
+  'terraform-registry': { url: 'https://status.hashicorp.com/api/v2/summary.json', type: 'statuspage' },
   // CDN & Edge
   'cloudflare':     { url: 'https://www.cloudflarestatus.com/api/v2/summary.json', type: 'statuspage' },
   'fastly':         { url: 'https://status.fastly.com/api/v2/summary.json',        type: 'statuspage' },
+  'bunny-cdn':      { url: 'https://status.bunny.net/api/v2/summary.json',         type: 'statuspage' },
   // DNS & Security
   'cloudflare-dns': { url: 'https://www.cloudflarestatus.com/api/v2/summary.json', type: 'statuspage' },
   'google-dns':     { url: 'https://status.cloud.google.com/incidents.json',       type: 'gcp' },
@@ -87,10 +119,16 @@ const STATUS_APIS: Partial<Record<string, { url: string; type: ApiType }>> = {
   'render':         { url: 'https://status.render.com/api/v2/summary.json',        type: 'statuspage' },
   'railway':        { url: 'https://status.railway.app/api/v2/summary.json',       type: 'statuspage' },
   'heroku':         { url: 'https://status.heroku.com/api/v2/summary.json',        type: 'statuspage' },
+  // Communications
+  'twilio':         { url: 'https://status.twilio.com/api/v2/summary.json',       type: 'statuspage' },
+  // Maps
+  'mapbox':         { url: 'https://status.mapbox.com/api/v2/summary.json',       type: 'statuspage' },
   // Package Registries
   'npm-registry':   { url: 'https://status.npmjs.org/api/v2/summary.json',         type: 'statuspage' },
   'pypi':           { url: 'https://status.python.org/api/v2/summary.json',        type: 'statuspage' },
   'docker-hub':     { url: 'https://www.dockerstatus.com/api/v2/summary.json',     type: 'statuspage' },
+  'crates-io':      { url: 'https://status.crates.io/api/v2/summary.json',         type: 'statuspage' },
+  'rubygems':       { url: 'https://status.rubygems.org/api/v2/summary.json',      type: 'statuspage' },
   // Payments
   'braintree':      { url: 'https://status.braintreepayments.com/api/v2/summary.json', type: 'statuspage' },
   // CI/CD
@@ -101,6 +139,8 @@ const STATUS_APIS: Partial<Record<string, { url: string; type: ApiType }>> = {
   'pagerduty':      { url: 'https://status.pagerduty.com/api/v2/summary.json',     type: 'statuspage' },
   'datadog':        { url: 'https://status.datadoghq.com/api/v2/summary.json',     type: 'statuspage' },
   'sentry':         { url: 'https://status.sentry.io/api/v2/summary.json',         type: 'statuspage' },
+  'splunk':         { url: 'https://status.splunkcloud.com/api/v2/summary.json',   type: 'statuspage' },
+  'elastic':        { url: 'https://status.elastic.co/api/v2/summary.json',       type: 'statuspage' },
   // AI Services
   'openai':         { url: 'https://status.openai.com/api/v2/summary.json',        type: 'statuspage' },
   'anthropic':      { url: 'https://status.anthropic.com/api/v2/summary.json',     type: 'statuspage' },

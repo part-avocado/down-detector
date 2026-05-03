@@ -80,7 +80,36 @@ INSERT OR IGNORE INTO services (id, name, category, url) VALUES
   ('slack',           'Slack',                'Observability',     'https://slack.com/api/api.test'),
   -- DNS & Security
   ('cloudflare-dns',  'Cloudflare 1.1.1.1',  'DNS & Security',    'https://cloudflare-dns.com'),
-  ('google-dns',      'Google 8.8.8.8',       'DNS & Security',    'https://dns.google/resolve?name=google.com&type=A');
+  ('google-dns',      'Google 8.8.8.8',       'DNS & Security',    'https://dns.google/resolve?name=google.com&type=A'),
+  -- Source control & collaboration
+  ('bitbucket',       'Bitbucket',             'Source Control',    'https://bitbucket.org'),
+  ('atlassian',       'Atlassian',             'Collaboration',     'https://www.atlassian.com'),
+  ('linear',          'Linear',                'Collaboration',     'https://linear.app'),
+  ('notion',          'Notion',                'Collaboration',     'https://www.notion.so'),
+  ('discord',         'Discord',               'Collaboration',     'https://discord.com'),
+  ('dropbox',         'Dropbox',               'Collaboration',     'https://www.dropbox.com'),
+  -- Identity
+  ('okta',            'Okta',                  'Auth & Identity',   'https://login.okta.com'),
+  -- Package registries
+  ('nuget',           'NuGet',                 'Package Registries','https://api.nuget.org/v3/index.json'),
+  ('crates-io',       'crates.io',             'Package Registries','https://crates.io/api/v1/crates/serde'),
+  ('rubygems',        'RubyGems',              'Package Registries','https://rubygems.org/api/v1/gems/rails.json'),
+  -- CDN
+  ('jsdelivr',        'jsDelivr',              'CDN & Edge',        'https://cdn.jsdelivr.net/npm/react/package.json'),
+  ('bunny-cdn',       'Bunny.net',             'CDN & Edge',        'https://api.bunny.net'),
+  -- Cloud / data
+  ('supabase',        'Supabase',              'Cloud Platforms',   'https://supabase.com'),
+  ('planetscale',     'PlanetScale',           'Cloud Platforms',   'https://planetscale.com'),
+  ('neon',            'Neon',                  'Cloud Platforms',   'https://neon.tech'),
+  ('mongodb-atlas',   'MongoDB Atlas',         'Cloud Platforms',   'https://cloud.mongodb.com'),
+  ('terraform-registry', 'Terraform Registry', 'Cloud Platforms', 'https://registry.terraform.io/.well-known/terraform.json'),
+  -- Communications & maps
+  ('twilio',          'Twilio',                'Communications',    'https://www.twilio.com/docs'),
+  ('mapbox',          'Mapbox',                'Maps',              'https://api.mapbox.com'),
+  -- Observability & alerts
+  ('splunk',          'Splunk',                'Observability',     'https://www.splunk.com'),
+  ('elastic',         'Elastic',               'Observability',     'https://www.elastic.co'),
+  ('pushover',        'Pushover',              'Observability',     'https://pushover.net');
 
 -- Normalize ping targets to API/control-plane endpoints (fixes older rows from INSERT OR IGNORE).
 UPDATE services SET url = 'https://github.com/manifest.json' WHERE id = 'github-web';
@@ -121,3 +150,25 @@ UPDATE services SET url = 'https://sentry.io/api/0/' WHERE id = 'sentry';
 UPDATE services SET url = 'https://slack.com/api/api.test' WHERE id = 'slack';
 UPDATE services SET url = 'https://cloudflare-dns.com' WHERE id = 'cloudflare-dns';
 UPDATE services SET url = 'https://dns.google/resolve?name=google.com&type=A' WHERE id = 'google-dns';
+UPDATE services SET url = 'https://bitbucket.org' WHERE id = 'bitbucket';
+UPDATE services SET url = 'https://www.atlassian.com' WHERE id = 'atlassian';
+UPDATE services SET url = 'https://linear.app' WHERE id = 'linear';
+UPDATE services SET url = 'https://www.notion.so' WHERE id = 'notion';
+UPDATE services SET url = 'https://discord.com' WHERE id = 'discord';
+UPDATE services SET url = 'https://www.dropbox.com' WHERE id = 'dropbox';
+UPDATE services SET url = 'https://login.okta.com' WHERE id = 'okta';
+UPDATE services SET url = 'https://api.nuget.org/v3/index.json' WHERE id = 'nuget';
+UPDATE services SET url = 'https://crates.io/api/v1/crates/serde' WHERE id = 'crates-io';
+UPDATE services SET url = 'https://rubygems.org/api/v1/gems/rails.json' WHERE id = 'rubygems';
+UPDATE services SET url = 'https://cdn.jsdelivr.net/npm/react/package.json' WHERE id = 'jsdelivr';
+UPDATE services SET url = 'https://api.bunny.net' WHERE id = 'bunny-cdn';
+UPDATE services SET url = 'https://supabase.com' WHERE id = 'supabase';
+UPDATE services SET url = 'https://planetscale.com' WHERE id = 'planetscale';
+UPDATE services SET url = 'https://neon.tech' WHERE id = 'neon';
+UPDATE services SET url = 'https://cloud.mongodb.com' WHERE id = 'mongodb-atlas';
+UPDATE services SET url = 'https://registry.terraform.io/.well-known/terraform.json' WHERE id = 'terraform-registry';
+UPDATE services SET url = 'https://www.twilio.com/docs' WHERE id = 'twilio';
+UPDATE services SET url = 'https://api.mapbox.com' WHERE id = 'mapbox';
+UPDATE services SET url = 'https://www.splunk.com' WHERE id = 'splunk';
+UPDATE services SET url = 'https://www.elastic.co' WHERE id = 'elastic';
+UPDATE services SET url = 'https://pushover.net' WHERE id = 'pushover';

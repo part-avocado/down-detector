@@ -9,7 +9,8 @@ interface PageProps {
 
 const CATEGORY_ORDER = [
   'Source Control', 'Cloud Platforms', 'CDN & Edge', 'DNS & Security',
-  'Auth & Identity', 'CI/CD', 'Package Registries', 'Payments',
+  'Auth & Identity', 'Collaboration', 'Communications', 'Maps',
+  'CI/CD', 'Package Registries', 'Payments',
   'Deployment', 'Observability', 'AI Services',
 ];
 
