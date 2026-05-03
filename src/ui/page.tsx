@@ -20,9 +20,10 @@ const OK_HEADLINES = [
   'nothing burning on the dashboards we ping',
   'no red dots in this neighbourhood',
   'the tubes are behaving',
-  'go touch grass — infra says hi',
+  'go touch grass',
   'calm skies over the URLs we watch',
-  'everyone showed up with a 2xx and a sandwich',
+  'everyone showed up with a 200 and a sandwich',
+  "we'll tell you if something goes wrong",
 ];
 
 export function StatusPage({ statuses, generatedAt }: PageProps) {
