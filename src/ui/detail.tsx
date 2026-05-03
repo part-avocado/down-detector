@@ -142,7 +142,7 @@ export function DetailPage({ service, checks, notifications, generatedAt }: Deta
             <div class="detail-url">{service.url}</div>
             {statusPageUrl && (
               <a href={statusPageUrl} class="detail-status-link" target="_blank" rel="noopener">
-                Official status page ↗
+                official status page ↗
               </a>
             )}
           </div>
@@ -160,10 +160,10 @@ export function DetailPage({ service, checks, notifications, generatedAt }: Deta
               </>
             )}
             <div class="explain-rules">
-              <div class="rule"><b>Operational</b> — HTTP 2xx or 3xx, response time under 3s</div>
-              <div class="rule"><b>Degraded</b> — HTTP 4xx, or response time 3s or more</div>
-              <div class="rule"><b>Down</b> — HTTP 5xx, connection error, or timeout after 5s</div>
-              <div class="rule">Checks run every 5 minutes via HTTP HEAD request</div>
+              <div class="rule"><b>operational</b>: it works! the endpoint responds with a HTTP response code of 2xx or 3xx, and has a response time of less than 3 seconds.</div>
+              <div class="rule"><b>degraded</b>: it works... ish. the endpoint responds with a HTTP response code of 4xx, or response time 3 seconds or longer.</div>
+              <div class="rule"><b>down</b>: it does not work! D: the endpoint responds with a HTTP 5xx response code, experiences a connection error, or timed-out.</div>
+              <div class="rule">checks run every 5 minutes via HTTP HEAD request</div>
             </div>
           </div>
 
