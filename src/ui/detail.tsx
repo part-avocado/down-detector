@@ -127,7 +127,7 @@ export function DetailPage({ service, checks, notifications, generatedAt }: Deta
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>{service.name} — Status</title>
+        <title>{service.name} | status</title>
         <style dangerouslySetInnerHTML={{ __html: CSS }} />
       </head>
       <body>
