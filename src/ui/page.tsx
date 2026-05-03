@@ -1,3 +1,5 @@
+import type { HeroLevel } from '../impact-tiers';
+import { summarizeWorstImpact } from '../impact-tiers';
 import type { ServiceStatus } from '../types';
 import { ServiceRow } from './components';
 import { CSS } from './styles';
@@ -8,7 +10,8 @@ interface PageProps {
 }
 
 const CATEGORY_ORDER = [
-  'Source Control', 'Cloud Platforms', 'CDN & Edge', 'DNS & Security',
+  'Source Control', 'Cloud Platforms', 'Data Platforms', 'Developer Tools',
+  'CDN & Edge', 'DNS & Security',
   'Auth & Identity', 'Collaboration', 'Communications', 'Maps',
   'CI/CD', 'Package Registries', 'Payments',
   'Deployment', 'Observability', 'AI Services',
@@ -25,23 +28,76 @@ const OK_HEADLINES = [
   "we'll tell you if something goes wrong",
 ];
 
-function pickOkHeadline(): string {
-  return OK_HEADLINES[Math.floor(Math.random() * OK_HEADLINES.length)];
+const BACKBONE_DOWN_HEADLINES = [
+  'internet is cooked',
+  'the big pipes are not having a good day',
+  'core internet infra is having a moment',
+  'hyperscalers left the chat',
+  'yes, it is not just you',
+];
+
+const BACKBONE_STRAIN_HEADLINES = [
+  'core services are sweaty',
+  'hyperscalers are grumpy but still here',
+  'the backbone is limping, not collapsed',
+  'major platforms are straining',
+];
+
+const CRITICAL_TROUBLE_HEADLINES = [
+  'internet is mildly cooked',
+  'important rails are wobbly',
+  'payments and deploy-adjacent stuff is rough',
+  'some load-bearing URLs are failing',
+];
+
+const CRITICAL_STRAIN_HEADLINES = [
+  'key services are fussy',
+  'important bits are degraded, not dead',
+  'identity and shipping surfaces are uneven',
+];
+
+const EDGES_DOWN_HEADLINES = [
+  'internet is uneven',
+  'mostly fine, patchy corners',
+  'niche outage energy',
+  'the long tail is having a day',
+];
+
+const EDGES_SOFT_HEADLINES = [
+  'a few edges are sluggish',
+  'nothing huge, just some rough spots',
+  'minor weirdness on secondary services',
+];
+
+function pickLine(lines: string[]): string {
+  return lines[Math.floor(Math.random() * lines.length)];
+}
+
+function headlineForLevel(level: HeroLevel): string {
+  switch (level) {
+    case 'waiting':
+      return 'waiting for checks';
+    case 'ok':
+      return pickLine(OK_HEADLINES);
+    case 'backbone_down':
+      return pickLine(BACKBONE_DOWN_HEADLINES);
+    case 'backbone_strain':
+      return pickLine(BACKBONE_STRAIN_HEADLINES);
+    case 'critical_trouble':
+      return pickLine(CRITICAL_TROUBLE_HEADLINES);
+    case 'critical_strain':
+      return pickLine(CRITICAL_STRAIN_HEADLINES);
+    case 'edges_down':
+      return pickLine(EDGES_DOWN_HEADLINES);
+    case 'edges_soft':
+      return pickLine(EDGES_SOFT_HEADLINES);
+  }
 }
 
 export function StatusPage({ statuses, generatedAt }: PageProps) {
-  const anyDown = statuses.some(s => s.latest?.status === 'down');
-  const anyDegraded = statuses.some(s => s.latest?.status === 'degraded');
-  const anyData = statuses.some(s => s.latest !== null);
-
-  const orbClass = !anyData ? 'warn' : anyDown ? 'crit' : anyDegraded ? 'warn' : 'ok';
-  const headline = !anyData
-    ? 'waiting for checks'
-    : anyDown
-    ? 'internet is cooked'
-    : anyDegraded
-    ? 'internet is mildly cooked'
-    : pickOkHeadline();
+  const { level, orbClass: impactOrb, anyData } = summarizeWorstImpact(statuses);
+  const orbClass = !anyData ? 'warn' : impactOrb;
+  const headline = headlineForLevel(level);
   const sub = !anyData
     ? 'POST /api/trigger to seed initial data'
     : `${statuses.length} services monitored · refreshes every 5 minutes`;

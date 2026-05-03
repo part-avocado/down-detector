@@ -27,10 +27,12 @@ const STATUS_PAGE_HOMEPAGES: Partial<Record<string, string>> = {
   'aws':             'https://health.aws.amazon.com',
   'digitalocean':    'https://status.digitalocean.com',
   'hetzner':         'https://status.hetzner.com',
+  // Data Platforms
   'supabase':        'https://status.supabase.com',
   'planetscale':     'https://planetscalestatus.com',
   'neon':            'https://neonstatus.com',
   'mongodb-atlas':   'https://status.mongodb.com',
+  // Developer Tools
   'terraform-registry': 'https://status.hashicorp.com',
   // CDN & Edge
   'cloudflare':      'https://www.cloudflarestatus.com',
@@ -41,6 +43,7 @@ const STATUS_PAGE_HOMEPAGES: Partial<Record<string, string>> = {
   'google-dns':      'https://status.cloud.google.com',
   // Auth & Identity
   'okta':            'https://status.okta.com',
+  'clerk':           'https://status.clerk.com',
   // Payments
   'stripe-api':      'https://status.stripe.com',
   'paypal':          'https://www.paypal-status.com',
@@ -54,6 +57,7 @@ const STATUS_PAGE_HOMEPAGES: Partial<Record<string, string>> = {
   'heroku':          'https://status.heroku.com',
   // Communications
   'twilio':          'https://status.twilio.com',
+  'slack':           'https://status.slack.com',
   // Maps
   'mapbox':          'https://status.mapbox.com',
   // Package Registries
@@ -69,7 +73,6 @@ const STATUS_PAGE_HOMEPAGES: Partial<Record<string, string>> = {
   'pagerduty':       'https://status.pagerduty.com',
   'datadog':         'https://status.datadoghq.com',
   'sentry':          'https://status.sentry.io',
-  'slack':           'https://status.slack.com',
   'splunk':          'https://status.splunkcloud.com',
   'elastic':         'https://status.elastic.co',
   // AI Services
@@ -101,9 +104,11 @@ const STATUS_APIS: Partial<Record<string, { url: string; type: ApiType }>> = {
   'gcp-console':    { url: 'https://status.cloud.google.com/incidents.json',       type: 'gcp' },
   'googleapis':     { url: 'https://status.cloud.google.com/incidents.json',       type: 'gcp' },
   'digitalocean':   { url: 'https://status.digitalocean.com/api/v2/summary.json',  type: 'statuspage' },
+  // Data Platforms
   'supabase':       { url: 'https://status.supabase.com/api/v2/summary.json',      type: 'statuspage' },
   'planetscale':    { url: 'https://planetscalestatus.com/api/v2/summary.json',    type: 'statuspage' },
   'mongodb-atlas':  { url: 'https://status.mongodb.com/api/v2/summary.json',       type: 'statuspage' },
+  // Developer Tools
   'terraform-registry': { url: 'https://status.hashicorp.com/api/v2/summary.json', type: 'statuspage' },
   // CDN & Edge
   'cloudflare':     { url: 'https://www.cloudflarestatus.com/api/v2/summary.json', type: 'statuspage' },
@@ -112,6 +117,8 @@ const STATUS_APIS: Partial<Record<string, { url: string; type: ApiType }>> = {
   // DNS & Security
   'cloudflare-dns': { url: 'https://www.cloudflarestatus.com/api/v2/summary.json', type: 'statuspage' },
   'google-dns':     { url: 'https://status.cloud.google.com/incidents.json',       type: 'gcp' },
+  // Auth & Identity
+  'clerk':          { url: 'https://status.clerk.com/api/v2/summary.json',         type: 'statuspage' },
   // Deployment
   'vercel':         { url: 'https://www.vercel-status.com/api/v2/summary.json',    type: 'statuspage' },
   'netlify':        { url: 'https://www.netlifystatus.com/api/v2/summary.json',    type: 'statuspage' },
@@ -121,6 +128,7 @@ const STATUS_APIS: Partial<Record<string, { url: string; type: ApiType }>> = {
   'heroku':         { url: 'https://status.heroku.com/api/v2/summary.json',        type: 'statuspage' },
   // Communications
   'twilio':         { url: 'https://status.twilio.com/api/v2/summary.json',       type: 'statuspage' },
+  'slack':          { url: 'https://status.slack.com/api/v2/summary.json',        type: 'statuspage' },
   // Maps
   'mapbox':         { url: 'https://status.mapbox.com/api/v2/summary.json',       type: 'statuspage' },
   // Package Registries

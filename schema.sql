@@ -32,7 +32,7 @@ INSERT OR IGNORE INTO services (id, name, category, url) VALUES
   ('azure-mgmt',   'Azure Active Directory',  'Auth & Identity',   'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration'),
   ('npm-registry', 'npm Registry',            'Package Registries','https://registry.npmjs.org/npm'),
   ('pypi',         'PyPI',                    'Package Registries','https://pypi.org/pypi/pip/json'),
-  ('docker-hub',   'Docker Hub',              'Package Registries','https://hub.docker.com/v2/repositories/library/hello-world'),
+  ('docker-hub',   'Docker Hub',              'Package Registries','https://hub.docker.com/'),
   ('stripe-api',   'Stripe.js CDN',           'Payments',          'https://checkout.stripe.com'),
   ('vercel',       'Vercel',                  'Deployment',        'https://api.vercel.com'),
   ('fly-io',       'Fly.io',                  'Deployment',        'https://fly-metrics.net'),
@@ -50,7 +50,7 @@ UPDATE services SET category = 'Package Registries' WHERE id = 'npm-registry';
 UPDATE services SET category = 'Payments'           WHERE id = 'stripe-api';
 UPDATE services SET category = 'Deployment'         WHERE id = 'vercel';
 UPDATE services SET name = 'AWS', url = 'https://ecs.amazonaws.com' WHERE id = 'aws';
-UPDATE services SET url = 'https://hub.docker.com/v2/repositories/library/hello-world' WHERE id = 'docker-hub';
+UPDATE services SET url = 'https://hub.docker.com/' WHERE id = 'docker-hub';
 UPDATE services SET name = 'Stripe', url = 'https://checkout.stripe.com' WHERE id = 'stripe-api';
 
 -- New services
@@ -77,7 +77,7 @@ INSERT OR IGNORE INTO services (id, name, category, url) VALUES
   ('pagerduty',       'PagerDuty',            'Observability',     'https://developer.pagerduty.com/api-docs/'),
   ('datadog',         'Datadog',              'Observability',     'https://docs.datadoghq.com/api/latest/'),
   ('sentry',          'Sentry',               'Observability',     'https://sentry.io/api/0/'),
-  ('slack',           'Slack',                'Observability',     'https://slack.com/api/api.test'),
+  ('slack',           'Slack',                'Communications',    'https://slack.com/api/api.test'),
   -- DNS & Security
   ('cloudflare-dns',  'Cloudflare 1.1.1.1',  'DNS & Security',    'https://cloudflare-dns.com'),
   ('google-dns',      'Google 8.8.8.8',       'DNS & Security',    'https://dns.google/resolve?name=google.com&type=A'),
@@ -90,6 +90,7 @@ INSERT OR IGNORE INTO services (id, name, category, url) VALUES
   ('dropbox',         'Dropbox',               'Collaboration',     'https://www.dropbox.com'),
   -- Identity
   ('okta',            'Okta',                  'Auth & Identity',   'https://login.okta.com'),
+  ('clerk',           'Clerk',                 'Auth & Identity',   'https://clerk.com'),
   -- Package registries
   ('nuget',           'NuGet',                 'Package Registries','https://api.nuget.org/v3/index.json'),
   ('crates-io',       'crates.io',             'Package Registries','https://crates.io/api/v1/crates/serde'),
@@ -98,18 +99,18 @@ INSERT OR IGNORE INTO services (id, name, category, url) VALUES
   ('jsdelivr',        'jsDelivr',              'CDN & Edge',        'https://cdn.jsdelivr.net/npm/react/package.json'),
   ('bunny-cdn',       'Bunny.net',             'CDN & Edge',        'https://api.bunny.net'),
   -- Cloud / data
-  ('supabase',        'Supabase',              'Cloud Platforms',   'https://supabase.com'),
-  ('planetscale',     'PlanetScale',           'Cloud Platforms',   'https://planetscale.com'),
-  ('neon',            'Neon',                  'Cloud Platforms',   'https://neon.tech'),
-  ('mongodb-atlas',   'MongoDB Atlas',         'Cloud Platforms',   'https://cloud.mongodb.com'),
-  ('terraform-registry', 'Terraform Registry', 'Cloud Platforms', 'https://registry.terraform.io/.well-known/terraform.json'),
+  ('supabase',        'Supabase',              'Data Platforms',    'https://supabase.com'),
+  ('planetscale',     'PlanetScale',           'Data Platforms',    'https://planetscale.com'),
+  ('neon',            'Neon',                  'Data Platforms',    'https://neon.tech'),
+  ('mongodb-atlas',   'MongoDB Atlas',         'Data Platforms',    'https://cloud.mongodb.com'),
+  ('terraform-registry', 'Terraform Registry', 'Developer Tools',   'https://registry.terraform.io/.well-known/terraform.json'),
   -- Communications & maps
   ('twilio',          'Twilio',                'Communications',    'https://www.twilio.com/docs'),
   ('mapbox',          'Mapbox',                'Maps',              'https://api.mapbox.com'),
   -- Observability & alerts
   ('splunk',          'Splunk',                'Observability',     'https://www.splunk.com'),
   ('elastic',         'Elastic',               'Observability',     'https://www.elastic.co'),
-  ('pushover',        'Pushover',              'Observability',     'https://pushover.net');
+  ('pushover',        'Pushover',              'Communications',    'https://pushover.net');
 
 -- Normalize ping targets to API/control-plane endpoints (fixes older rows from INSERT OR IGNORE).
 UPDATE services SET url = 'https://github.com/manifest.json' WHERE id = 'github-web';
@@ -124,7 +125,7 @@ UPDATE services SET url = 'https://accounts.google.com/.well-known/openid-config
 UPDATE services SET url = 'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration' WHERE id = 'azure-mgmt';
 UPDATE services SET url = 'https://registry.npmjs.org/npm' WHERE id = 'npm-registry';
 UPDATE services SET url = 'https://pypi.org/pypi/pip/json' WHERE id = 'pypi';
-UPDATE services SET url = 'https://hub.docker.com/v2/repositories/library/hello-world' WHERE id = 'docker-hub';
+UPDATE services SET url = 'https://hub.docker.com/' WHERE id = 'docker-hub';
 UPDATE services SET url = 'https://checkout.stripe.com' WHERE id = 'stripe-api';
 UPDATE services SET url = 'https://api.vercel.com' WHERE id = 'vercel';
 UPDATE services SET url = 'https://fly-metrics.net' WHERE id = 'fly-io';
@@ -157,6 +158,7 @@ UPDATE services SET url = 'https://www.notion.so' WHERE id = 'notion';
 UPDATE services SET url = 'https://discord.com' WHERE id = 'discord';
 UPDATE services SET url = 'https://www.dropbox.com' WHERE id = 'dropbox';
 UPDATE services SET url = 'https://login.okta.com' WHERE id = 'okta';
+UPDATE services SET url = 'https://clerk.com' WHERE id = 'clerk';
 UPDATE services SET url = 'https://api.nuget.org/v3/index.json' WHERE id = 'nuget';
 UPDATE services SET url = 'https://crates.io/api/v1/crates/serde' WHERE id = 'crates-io';
 UPDATE services SET url = 'https://rubygems.org/api/v1/gems/rails.json' WHERE id = 'rubygems';
@@ -172,3 +174,8 @@ UPDATE services SET url = 'https://api.mapbox.com' WHERE id = 'mapbox';
 UPDATE services SET url = 'https://www.splunk.com' WHERE id = 'splunk';
 UPDATE services SET url = 'https://www.elastic.co' WHERE id = 'elastic';
 UPDATE services SET url = 'https://pushover.net' WHERE id = 'pushover';
+
+-- Category assignments (canonical grouping; fixes existing rows on migrate)
+UPDATE services SET category = 'Communications' WHERE id IN ('slack', 'twilio', 'pushover');
+UPDATE services SET category = 'Data Platforms' WHERE id IN ('supabase', 'planetscale', 'neon', 'mongodb-atlas');
+UPDATE services SET category = 'Developer Tools' WHERE id = 'terraform-registry';
