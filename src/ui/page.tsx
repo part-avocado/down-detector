@@ -100,7 +100,7 @@ export function StatusPage({ statuses, generatedAt }: PageProps) {
   const headline = headlineForLevel(level);
   const sub = !anyData
     ? 'POST /api/trigger to seed initial data'
-    : `${statuses.length} services monitored · refreshes every 5 minutes`;
+    : `${statuses.length} services monitored · refreshes every 10 minutes`;
 
   const allCats = [...new Set(statuses.map(s => s.service.category))];
   const categories = allCats.sort((a, b) => {

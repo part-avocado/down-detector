@@ -1,12 +1,15 @@
 import type { CheckResult, CheckStatus, Service } from './types';
 
-const TIMEOUT_MS = 5000;
-const DEGRADED_LATENCY_MS = 3000;
+/** AbortController cutoff; timeouts count as down. */
+export const CHECK_TIMEOUT_MS = 10000;
+
+/** Successful 2xx/3xx slower than this (edge-to-remote) counts as degraded. */
+export const DEGRADED_LATENCY_MS = 5000;
 
 export async function checkService(service: Service): Promise<Omit<CheckResult, 'id'>> {
   const checkedAt = Math.floor(Date.now() / 1000);
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  const timer = setTimeout(() => controller.abort(), CHECK_TIMEOUT_MS);
   const start = Date.now();
 
   try {
@@ -23,7 +26,7 @@ export async function checkService(service: Service): Promise<Omit<CheckResult, 
     let status: CheckStatus;
     if (statusCode >= 500) {
       status = 'down';
-    } else if (statusCode >= 400 || latency > DEGRADED_LATENCY_MS) {
+    } else if (statusCode >= 400 || latency >= DEGRADED_LATENCY_MS) {
       status = 'degraded';
     } else {
       status = 'up';
@@ -33,12 +36,12 @@ export async function checkService(service: Service): Promise<Omit<CheckResult, 
   } catch (err) {
     clearTimeout(timer);
     const latency = Date.now() - start;
-    const isTimeout = (err instanceof Error && err.name === 'AbortError') || latency >= TIMEOUT_MS;
+    const isTimeout = (err instanceof Error && err.name === 'AbortError') || latency >= CHECK_TIMEOUT_MS;
     return {
       service_id: service.id,
       checked_at: checkedAt,
       status: 'down',
-      latency_ms: isTimeout ? TIMEOUT_MS : null,
+      latency_ms: isTimeout ? CHECK_TIMEOUT_MS : null,
       status_code: null,
       error: err instanceof Error ? err.message : String(err),
     };

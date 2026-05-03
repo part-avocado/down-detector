@@ -7,7 +7,7 @@ A status page that pings real service endpoints instead of trusting vendor statu
 - **Runtime**: Cloudflare Workers (no Node.js APIs)
 - **Framework**: Hono — routing, CORS middleware, JSX server-side rendering
 - **Database**: Cloudflare D1 (SQLite-compatible)
-- **Scheduler**: Cloudflare Cron Triggers — checks run every 5 minutes
+- **Scheduler**: Cloudflare Cron Triggers — checks run every 10 minutes
 - **Language**: TypeScript throughout
 
 ## Commands
@@ -40,10 +40,10 @@ wrangler.toml       # Cloudflare config: D1 binding, cron schedule
 
 ## Key Behaviours
 
-**Health check classification** (`src/checker.ts`):
-- `up` — HTTP 2xx/3xx, response time < 3000ms
-- `degraded` — HTTP 4xx OR latency ≥ 3000ms
-- `down` — HTTP 5xx, timeout (> 5000ms AbortController), or connection error
+**Health check classification** (`src/checker.ts`), tuned for Worker edge egress (datacenter ↔ remote):
+- `up` — HTTP 2xx/3xx, response time < 5000ms
+- `degraded` — HTTP 4xx OR latency ≥ 5000ms
+- `down` — HTTP 5xx, timeout (> 10000ms AbortController), or connection error
 - All checks use `HEAD` with `redirect: follow`
 
 **Cron handler** (`src/index.tsx` → `runChecks`):

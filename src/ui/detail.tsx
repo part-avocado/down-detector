@@ -1,7 +1,11 @@
 import type { CheckResult, CheckStatus, Service } from '../types';
+import { CHECK_TIMEOUT_MS, DEGRADED_LATENCY_MS } from '../checker';
 import type { StatusNotification } from '../status-page';
 import { getStatusPageUrl } from '../status-page';
 import { CSS } from './styles';
+
+const degradedSec = DEGRADED_LATENCY_MS / 1000;
+const timeoutSec = CHECK_TIMEOUT_MS / 1000;
 
 interface DetailProps {
   service: Service;
@@ -16,14 +20,14 @@ function explainCheck(check: CheckResult): { label: string; reason: string } {
   if (status === 'up') {
     return {
       label: 'operational',
-      reason: `this responded with HTTP ${status_code} in ${latency_ms}ms. Both the status code (2xx/3xx) and response time (under 3 seconds) are within normal thresholds.`,
+      reason: `this responded with HTTP ${status_code} in ${latency_ms}ms. Both the status code (2xx/3xx) and response time (under ${degradedSec} seconds) are within normal thresholds.`,
     };
   }
 
   if (status === 'down') {
     if (!status_code) {
-      if (latency_ms != null && latency_ms >= 4900) {
-        return { label: 'timed-out', reason: 'Request timed out as no response was received within the 5 second limit. This typically indicates a network-level issue or the server is not accepting connections.' };
+      if (latency_ms != null && latency_ms >= CHECK_TIMEOUT_MS) {
+        return { label: 'timed-out', reason: `Request timed out as no response was received within the ${timeoutSec} second limit. This typically indicates a network-level issue or the server is not accepting connections.` };
       }
       return { label: 'down(?)', reason: `Connection failed before a response could be received. Error: ${error ?? 'unknown'}.` };
     }
@@ -39,7 +43,7 @@ function explainCheck(check: CheckResult): { label: string; reason: string } {
   }
   return {
     label: 'slow',
-    reason: `responded HTTP ${status_code} in ${latency_ms}ms. The response was successful but took longer than the 3 second threshold, indicating slow or overloaded infra.`,
+    reason: `responded HTTP ${status_code} in ${latency_ms}ms. The response was successful but took ${degradedSec} seconds or longer, indicating slow or overloaded infra.`,
   };
 }
 
@@ -165,15 +169,15 @@ export function DetailPage({ service, checks, notifications, generatedAt }: Deta
             )}
             <div class="explain-rules">
               <div class={ruleHit === 'up' ? 'rule rule-hit rule-hit-up' : 'rule'}>
-                <b>operational</b>: it works! the endpoint responds with a HTTP response code of 2xx or 3xx, and has a response time of less than 3 seconds.
+                <b>operational</b>: it works! the endpoint responds with a HTTP response code of 2xx or 3xx, and has a response time of less than {degradedSec} seconds.
               </div>
               <div class={ruleHit === 'degraded' ? 'rule rule-hit rule-hit-degraded' : 'rule'}>
-                <b>degraded</b>: it works... ish. the endpoint responds with a HTTP response code of 4xx, or response time 3 seconds or longer.
+                <b>degraded</b>: it works... ish. the endpoint responds with a HTTP response code of 4xx, or response time {degradedSec} seconds or longer.
               </div>
               <div class={ruleHit === 'down' ? 'rule rule-hit rule-hit-down' : 'rule'}>
-                <b>down</b>: it does not work! D: the endpoint responds with a HTTP 5xx response code, experiences a connection error, or timed-out.
+                <b>down</b>: it does not work! D: the endpoint responds with a HTTP 5xx response code, experiences a connection error, or timed-out (no response within {timeoutSec} seconds).
               </div>
-              <div class="rule">checks run every 5 minutes via HTTP HEAD request</div>
+              <div class="rule">checks run every 10 minutes via HTTP HEAD request</div>
             </div>
           </div>
 
