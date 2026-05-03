@@ -20,15 +20,15 @@ export function StatusPage({ statuses, generatedAt }: PageProps) {
 
   const orbClass = !anyData ? 'warn' : anyDown ? 'crit' : anyDegraded ? 'warn' : 'ok';
   const headline = !anyData
-    ? 'Waiting for first check'
+    ? 'waiting for checks'
     : anyDown
-    ? 'Service disruption detected'
+    ? 'internet is cooked'
     : anyDegraded
-    ? 'Degraded performance'
-    : 'All systems operational';
+    ? 'internet is mildly cooked'
+    : 'internet is fine, stop panicking';
   const sub = !anyData
     ? 'POST /api/trigger to seed initial data'
-    : `${statuses.length} services monitored · checked every 5 minutes`;
+    : `${statuses.length} services monitored · refreshes every 5 minutes`;
 
   const allCats = [...new Set(statuses.map(s => s.service.category))];
   const categories = allCats.sort((a, b) => {

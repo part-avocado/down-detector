@@ -15,31 +15,31 @@ function explainCheck(check: CheckResult): { label: string; reason: string } {
 
   if (status === 'up') {
     return {
-      label: 'Operational',
-      reason: `Responded HTTP ${status_code} in ${latency_ms}ms. Both the status code (2xx/3xx) and response time (under 3 seconds) are within normal thresholds.`,
+      label: 'operational',
+      reason: `this responded with HTTP ${status_code} in ${latency_ms}ms. Both the status code (2xx/3xx) and response time (under 3 seconds) are within normal thresholds.`,
     };
   }
 
   if (status === 'down') {
     if (!status_code) {
       if (latency_ms != null && latency_ms >= 4900) {
-        return { label: 'Down', reason: 'Request timed out as no response was received within the 5 second limit. This typically indicates a network-level issue or the server is not accepting connections.' };
+        return { label: 'timed-out', reason: 'Request timed out as no response was received within the 5 second limit. This typically indicates a network-level issue or the server is not accepting connections.' };
       }
-      return { label: 'Down', reason: `Connection failed before a response could be received. Error: ${error ?? 'unknown'}.` };
+      return { label: 'down(?)', reason: `Connection failed before a response could be received. Error: ${error ?? 'unknown'}.` };
     }
-    return { label: 'Down', reason: `Responded HTTP ${status_code} in ${latency_ms}ms. 5xx responses indicate a server-side error, therefore the service is classified as down.` };
+    return { label: 'down', reason: `Responded HTTP ${status_code} in ${latency_ms}ms. 5xx responses indicate a server-side error, therefore the service is classified as down.` };
   }
 
   // degraded
   if (status_code && status_code >= 400) {
     return {
-      label: 'Degraded',
-      reason: `Responded HTTP ${status_code} in ${latency_ms}ms. 4xx responses indicate a client or authentication issue at the endpoint being checked. The server is reachable but not behaving normally.`,
+      label: 'degraded',
+      reason: `responded with HTTP ${status_code} in ${latency_ms}ms. 4xx responses indicate a client or authentication issue at the endpoint being checked. The server is reachable but not behaving normally.`,
     };
   }
   return {
-    label: 'Degraded',
-    reason: `Responded HTTP ${status_code} in ${latency_ms}ms. The response was successful but took longer than the 3 second threshold, indicating slow or overloaded infra.`,
+    label: 'slow',
+    reason: `responded HTTP ${status_code} in ${latency_ms}ms. The response was successful but took longer than the 3 second threshold, indicating slow or overloaded infra.`,
   };
 }
 
