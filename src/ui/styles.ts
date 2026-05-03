@@ -147,6 +147,29 @@ export const CSS = `
   }
   .rule { font-size: 0.6875rem; color: #484848; line-height: 1.6; }
   .rule b { color: #606060; font-weight: 500; }
+  .rule.rule-hit {
+    padding: 0.45rem 0.55rem; margin-left: -0.55rem; margin-right: -0.55rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+  }
+  .rule.rule-hit-up {
+    border-color: rgba(34,197,94,0.35);
+    background: rgba(34,197,94,0.08);
+    color: #8fb89a;
+  }
+  .rule.rule-hit-up b { color: #4ade80; }
+  .rule.rule-hit-degraded {
+    border-color: rgba(245,158,11,0.35);
+    background: rgba(245,158,11,0.08);
+    color: #b89b6e;
+  }
+  .rule.rule-hit-degraded b { color: #fbbf24; }
+  .rule.rule-hit-down {
+    border-color: rgba(239,68,68,0.38);
+    background: rgba(239,68,68,0.09);
+    color: #b88a85;
+  }
+  .rule.rule-hit-down b { color: #f87171; }
 
   /* ── Search ── */
   .search-wrap { margin-bottom: 2rem; }

@@ -120,6 +120,10 @@ export function DetailPage({ service, checks, notifications, generatedAt }: Deta
   const latest = checks[0] ?? null;
   const explanation = latest ? explainCheck(latest) : null;
   const s = latest?.status ?? 'unknown';
+  const ruleHit =
+    latest?.status === 'up' || latest?.status === 'degraded' || latest?.status === 'down'
+      ? latest.status
+      : null;
   const statusPageUrl = getStatusPageUrl(service.id);
 
   return (
@@ -160,9 +164,15 @@ export function DetailPage({ service, checks, notifications, generatedAt }: Deta
               </>
             )}
             <div class="explain-rules">
-              <div class="rule"><b>operational</b>: it works! the endpoint responds with a HTTP response code of 2xx or 3xx, and has a response time of less than 3 seconds.</div>
-              <div class="rule"><b>degraded</b>: it works... ish. the endpoint responds with a HTTP response code of 4xx, or response time 3 seconds or longer.</div>
-              <div class="rule"><b>down</b>: it does not work! D: the endpoint responds with a HTTP 5xx response code, experiences a connection error, or timed-out.</div>
+              <div class={ruleHit === 'up' ? 'rule rule-hit rule-hit-up' : 'rule'}>
+                <b>operational</b>: it works! the endpoint responds with a HTTP response code of 2xx or 3xx, and has a response time of less than 3 seconds.
+              </div>
+              <div class={ruleHit === 'degraded' ? 'rule rule-hit rule-hit-degraded' : 'rule'}>
+                <b>degraded</b>: it works... ish. the endpoint responds with a HTTP response code of 4xx, or response time 3 seconds or longer.
+              </div>
+              <div class={ruleHit === 'down' ? 'rule rule-hit rule-hit-down' : 'rule'}>
+                <b>down</b>: it does not work! D: the endpoint responds with a HTTP 5xx response code, experiences a connection error, or timed-out.
+              </div>
               <div class="rule">checks run every 5 minutes via HTTP HEAD request</div>
             </div>
           </div>
