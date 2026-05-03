@@ -8,8 +8,9 @@ interface PageProps {
 }
 
 const CATEGORY_ORDER = [
-  'Source Control', 'Cloud Platforms', 'CDN & Edge', 'Auth & Identity',
-  'Package Registries', 'Payments', 'Deployment', 'AI Services',
+  'Source Control', 'Cloud Platforms', 'CDN & Edge', 'DNS & Security',
+  'Auth & Identity', 'CI/CD', 'Package Registries', 'Payments',
+  'Deployment', 'Observability', 'AI Services',
 ];
 
 export function StatusPage({ statuses, generatedAt }: PageProps) {

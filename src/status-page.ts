@@ -9,25 +9,54 @@ export interface StatusNotification {
 }
 
 const STATUS_PAGE_HOMEPAGES: Partial<Record<string, string>> = {
-  'github-web':   'https://www.githubstatus.com',
-  'github-api':   'https://www.githubstatus.com',
-  'gitlab':       'https://status.gitlab.com',
-  'gcp-console':  'https://status.cloud.google.com',
-  'googleapis':   'https://status.cloud.google.com',
-  'azure-portal': 'https://azure.status.microsoft',
-  'azure-mgmt':   'https://azure.status.microsoft',
-  'aws':          'https://health.aws.amazon.com',
-  'cloudflare':   'https://www.cloudflarestatus.com',
-  'fastly':       'https://status.fastly.com',
-  'stripe-api':   'https://status.stripe.com',
-  'vercel':       'https://www.vercel-status.com',
-  'npm-registry': 'https://status.npmjs.org',
-  'pypi':         'https://status.python.org',
-  'docker-hub':   'https://www.dockerstatus.com',
-  'fly-io':       'https://status.fly.io',
-  'render':       'https://status.render.com',
-  'openai':       'https://status.openai.com',
-  'anthropic':    'https://status.anthropic.com',
+  // Source Control
+  'github-web':      'https://www.githubstatus.com',
+  'github-api':      'https://www.githubstatus.com',
+  'gitlab':          'https://status.gitlab.com',
+  // Cloud Platforms
+  'gcp-console':     'https://status.cloud.google.com',
+  'googleapis':      'https://status.cloud.google.com',
+  'azure-portal':    'https://azure.status.microsoft',
+  'azure-mgmt':      'https://azure.status.microsoft',
+  'aws':             'https://health.aws.amazon.com',
+  'digitalocean':    'https://status.digitalocean.com',
+  'hetzner':         'https://status.hetzner.com',
+  // CDN & Edge
+  'cloudflare':      'https://www.cloudflarestatus.com',
+  'fastly':          'https://status.fastly.com',
+  // DNS & Security
+  'cloudflare-dns':  'https://www.cloudflarestatus.com',
+  'google-dns':      'https://status.cloud.google.com',
+  // Payments
+  'stripe-api':      'https://status.stripe.com',
+  'paypal':          'https://www.paypal-status.com',
+  'braintree':       'https://status.braintreepayments.com',
+  // Deployment
+  'vercel':          'https://www.vercel-status.com',
+  'netlify':         'https://www.netlifystatus.com',
+  'fly-io':          'https://status.fly.io',
+  'render':          'https://status.render.com',
+  'railway':         'https://status.railway.app',
+  'heroku':          'https://status.heroku.com',
+  // Package Registries
+  'npm-registry':    'https://status.npmjs.org',
+  'pypi':            'https://status.python.org',
+  'docker-hub':      'https://www.dockerstatus.com',
+  // CI/CD
+  'github-actions':  'https://www.githubstatus.com',
+  'circleci':        'https://status.circleci.com',
+  'buildkite':       'https://www.buildkitestatus.com',
+  // Observability
+  'pagerduty':       'https://status.pagerduty.com',
+  'datadog':         'https://status.datadoghq.com',
+  'sentry':          'https://status.sentry.io',
+  'slack':           'https://status.slack.com',
+  // AI Services
+  'openai':          'https://status.openai.com',
+  'anthropic':       'https://status.anthropic.com',
+  'hugging-face':    'https://status.huggingface.co',
+  'google-gemini':   'https://status.cloud.google.com',
+  'groq':            'https://status.groq.com',
 };
 
 export function getStatusPageUrl(serviceId: string): string | null {
@@ -37,21 +66,46 @@ export function getStatusPageUrl(serviceId: string): string | null {
 type ApiType = 'statuspage' | 'gcp';
 
 const STATUS_APIS: Partial<Record<string, { url: string; type: ApiType }>> = {
-  'github-web':   { url: 'https://www.githubstatus.com/api/v2/summary.json',     type: 'statuspage' },
-  'github-api':   { url: 'https://www.githubstatus.com/api/v2/summary.json',     type: 'statuspage' },
-  'gitlab':       { url: 'https://status.gitlab.com/api/v2/summary.json',        type: 'statuspage' },
-  'gcp-console':  { url: 'https://status.cloud.google.com/incidents.json',       type: 'gcp' },
-  'googleapis':   { url: 'https://status.cloud.google.com/incidents.json',       type: 'gcp' },
-  'cloudflare':   { url: 'https://www.cloudflarestatus.com/api/v2/summary.json', type: 'statuspage' },
-  'fastly':       { url: 'https://status.fastly.com/api/v2/summary.json',        type: 'statuspage' },
-  'vercel':       { url: 'https://www.vercel-status.com/api/v2/summary.json',    type: 'statuspage' },
-  'npm-registry': { url: 'https://status.npmjs.org/api/v2/summary.json',         type: 'statuspage' },
-  'pypi':         { url: 'https://status.python.org/api/v2/summary.json',        type: 'statuspage' },
-  'docker-hub':   { url: 'https://www.dockerstatus.com/api/v2/summary.json',     type: 'statuspage' },
-  'fly-io':       { url: 'https://status.fly.io/api/v2/summary.json',            type: 'statuspage' },
-  'render':       { url: 'https://status.render.com/api/v2/summary.json',        type: 'statuspage' },
-  'openai':       { url: 'https://status.openai.com/api/v2/summary.json',        type: 'statuspage' },
-  'anthropic':    { url: 'https://status.anthropic.com/api/v2/summary.json',     type: 'statuspage' },
+  // Source Control
+  'github-web':     { url: 'https://www.githubstatus.com/api/v2/summary.json',     type: 'statuspage' },
+  'github-api':     { url: 'https://www.githubstatus.com/api/v2/summary.json',     type: 'statuspage' },
+  'gitlab':         { url: 'https://status.gitlab.com/api/v2/summary.json',        type: 'statuspage' },
+  // Cloud Platforms
+  'gcp-console':    { url: 'https://status.cloud.google.com/incidents.json',       type: 'gcp' },
+  'googleapis':     { url: 'https://status.cloud.google.com/incidents.json',       type: 'gcp' },
+  'digitalocean':   { url: 'https://status.digitalocean.com/api/v2/summary.json',  type: 'statuspage' },
+  // CDN & Edge
+  'cloudflare':     { url: 'https://www.cloudflarestatus.com/api/v2/summary.json', type: 'statuspage' },
+  'fastly':         { url: 'https://status.fastly.com/api/v2/summary.json',        type: 'statuspage' },
+  // DNS & Security
+  'cloudflare-dns': { url: 'https://www.cloudflarestatus.com/api/v2/summary.json', type: 'statuspage' },
+  'google-dns':     { url: 'https://status.cloud.google.com/incidents.json',       type: 'gcp' },
+  // Deployment
+  'vercel':         { url: 'https://www.vercel-status.com/api/v2/summary.json',    type: 'statuspage' },
+  'netlify':        { url: 'https://www.netlifystatus.com/api/v2/summary.json',    type: 'statuspage' },
+  'fly-io':         { url: 'https://status.fly.io/api/v2/summary.json',            type: 'statuspage' },
+  'render':         { url: 'https://status.render.com/api/v2/summary.json',        type: 'statuspage' },
+  'railway':        { url: 'https://status.railway.app/api/v2/summary.json',       type: 'statuspage' },
+  'heroku':         { url: 'https://status.heroku.com/api/v2/summary.json',        type: 'statuspage' },
+  // Package Registries
+  'npm-registry':   { url: 'https://status.npmjs.org/api/v2/summary.json',         type: 'statuspage' },
+  'pypi':           { url: 'https://status.python.org/api/v2/summary.json',        type: 'statuspage' },
+  'docker-hub':     { url: 'https://www.dockerstatus.com/api/v2/summary.json',     type: 'statuspage' },
+  // Payments
+  'braintree':      { url: 'https://status.braintreepayments.com/api/v2/summary.json', type: 'statuspage' },
+  // CI/CD
+  'github-actions': { url: 'https://www.githubstatus.com/api/v2/summary.json',     type: 'statuspage' },
+  'circleci':       { url: 'https://status.circleci.com/api/v2/summary.json',      type: 'statuspage' },
+  'buildkite':      { url: 'https://www.buildkitestatus.com/api/v2/summary.json',  type: 'statuspage' },
+  // Observability
+  'pagerduty':      { url: 'https://status.pagerduty.com/api/v2/summary.json',     type: 'statuspage' },
+  'datadog':        { url: 'https://status.datadoghq.com/api/v2/summary.json',     type: 'statuspage' },
+  'sentry':         { url: 'https://status.sentry.io/api/v2/summary.json',         type: 'statuspage' },
+  // AI Services
+  'openai':         { url: 'https://status.openai.com/api/v2/summary.json',        type: 'statuspage' },
+  'anthropic':      { url: 'https://status.anthropic.com/api/v2/summary.json',     type: 'statuspage' },
+  'hugging-face':   { url: 'https://status.huggingface.co/api/v2/summary.json',    type: 'statuspage' },
+  'google-gemini':  { url: 'https://status.cloud.google.com/incidents.json',       type: 'gcp' },
 };
 
 // ── Atlassian Statuspage ───────────────────────────────────────────────────────

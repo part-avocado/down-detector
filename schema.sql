@@ -49,5 +49,35 @@ UPDATE services SET category = 'Auth & Identity',   name = 'Azure Active Directo
 UPDATE services SET category = 'Package Registries' WHERE id = 'npm-registry';
 UPDATE services SET category = 'Payments'           WHERE id = 'stripe-api';
 UPDATE services SET category = 'Deployment'         WHERE id = 'vercel';
-UPDATE services SET name = 'AWS', url = 'https://aws.amazon.com'    WHERE id = 'aws';
-UPDATE services SET url = 'https://www.docker.com'                  WHERE id = 'docker-hub';
+UPDATE services SET name = 'AWS', url = 'https://aws.amazon.com'       WHERE id = 'aws';
+UPDATE services SET url = 'https://www.docker.com'                     WHERE id = 'docker-hub';
+UPDATE services SET name = 'Stripe', url = 'https://stripe.com'       WHERE id = 'stripe-api';
+
+-- New services
+INSERT OR IGNORE INTO services (id, name, category, url) VALUES
+  -- AI Services
+  ('hugging-face',    'Hugging Face',         'AI Services',      'https://huggingface.co'),
+  ('google-gemini',   'Google Gemini',        'AI Services',      'https://gemini.google.com'),
+  ('groq',            'Groq',                 'AI Services',      'https://console.groq.com'),
+  -- Cloud Platforms
+  ('digitalocean',    'DigitalOcean',         'Cloud Platforms',  'https://www.digitalocean.com'),
+  ('hetzner',         'Hetzner',              'Cloud Platforms',  'https://www.hetzner.com'),
+  -- CI/CD
+  ('github-actions',  'GitHub Actions',       'CI/CD',            'https://api.github.com'),
+  ('circleci',        'CircleCI',             'CI/CD',            'https://circleci.com'),
+  ('buildkite',       'Buildkite',            'CI/CD',            'https://buildkite.com'),
+  -- Deployment
+  ('netlify',         'Netlify',              'Deployment',       'https://netlify.com'),
+  ('railway',         'Railway',              'Deployment',       'https://railway.app'),
+  ('heroku',          'Heroku',               'Deployment',       'https://heroku.com'),
+  -- Payments
+  ('paypal',          'PayPal',               'Payments',         'https://www.paypal.com'),
+  ('braintree',       'Braintree',            'Payments',         'https://www.braintreepayments.com'),
+  -- Observability
+  ('pagerduty',       'PagerDuty',            'Observability',    'https://www.pagerduty.com'),
+  ('datadog',         'Datadog',              'Observability',    'https://www.datadoghq.com'),
+  ('sentry',          'Sentry',               'Observability',    'https://sentry.io'),
+  ('slack',           'Slack',                'Observability',    'https://slack.com'),
+  -- DNS & Security
+  ('cloudflare-dns',  'Cloudflare 1.1.1.1',  'DNS & Security',   'https://one.one.one.one'),
+  ('google-dns',      'Google 8.8.8.8',       'DNS & Security',   'https://dns.google');
