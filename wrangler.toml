@@ -1,0 +1,12 @@
+name = "down-detector"
+main = "src/index.tsx"
+compatibility_date = "2026-05-03"
+compatibility_flags = []
+
+[triggers]
+crons = ["*/5 * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "down-detector-db"
+database_id = "f72edb76-3839-4cd7-926f-164a712e23c7"
