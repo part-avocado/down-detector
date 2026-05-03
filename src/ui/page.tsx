@@ -42,7 +42,7 @@ export function StatusPage({ statuses, generatedAt }: PageProps) {
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Status</title>
+        <title>status</title>
         <style dangerouslySetInnerHTML={{ __html: CSS }} />
       </head>
       <body>
