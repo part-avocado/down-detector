@@ -13,18 +13,20 @@ const CATEGORY_ORDER = [
   'Deployment', 'Observability', 'AI Services',
 ];
 
-/** Rotated among these while all monitored endpoints look OK — choice is sticky per tab via sessionStorage so polling does not change it. */
+/** One of these is chosen at random whenever the homepage is rendered with all-clear state (each poll gets a fresh line). */
 const OK_HEADLINES = [
   'internet is fine, stop panicking',
   'all monitored endpoints answered politely',
-  'nothing burning on the dashboards we ping',
-  'no red dots in this neighbourhood',
   'the tubes are behaving',
   'go touch grass',
   'calm skies over the URLs we watch',
   'everyone showed up with a 200 and a sandwich',
   "we'll tell you if something goes wrong",
 ];
+
+function pickOkHeadline(): string {
+  return OK_HEADLINES[Math.floor(Math.random() * OK_HEADLINES.length)];
+}
 
 export function StatusPage({ statuses, generatedAt }: PageProps) {
   const anyDown = statuses.some(s => s.latest?.status === 'down');
@@ -38,7 +40,7 @@ export function StatusPage({ statuses, generatedAt }: PageProps) {
     ? 'internet is cooked'
     : anyDegraded
     ? 'internet is mildly cooked'
-    : OK_HEADLINES[0];
+    : pickOkHeadline();
   const sub = !anyData
     ? 'POST /api/trigger to seed initial data'
     : `${statuses.length} services monitored · refreshes every 5 minutes`;
@@ -105,21 +107,6 @@ export function StatusPage({ statuses, generatedAt }: PageProps) {
           }
           var inp = document.getElementById('svc-search');
           if (inp) inp.addEventListener('input', function() { filterSvcs(this.value); });
-          var OKMSGS = ${JSON.stringify(OK_HEADLINES)};
-          var OKKEY = 'dd-ok-headline-i';
-          function applyStickyOkHeadline() {
-            var orb = document.querySelector('.orb');
-            var titleEl = document.querySelector('.hero-title');
-            if (!orb || !titleEl || !orb.classList.contains('ok')) return;
-            var i = sessionStorage.getItem(OKKEY);
-            if (i === null || i === '') {
-              i = String(Math.floor(Math.random() * OKMSGS.length));
-              sessionStorage.setItem(OKKEY, i);
-            }
-            var idx = parseInt(i, 10);
-            if (idx >= 0 && idx < OKMSGS.length) titleEl.textContent = OKMSGS[idx];
-          }
-          applyStickyOkHeadline();
           setInterval(async function() {
             try {
               var q = (document.getElementById('svc-search') || {}).value || '';
@@ -129,7 +116,6 @@ export function StatusPage({ statuses, generatedAt }: PageProps) {
               document.querySelector('.page').replaceWith(doc.querySelector('.page'));
               var ni = document.getElementById('svc-search');
               if (ni && q) { ni.value = q; filterSvcs(q); }
-              applyStickyOkHeadline();
             } catch {}
           }, 30000);
         `}} />
