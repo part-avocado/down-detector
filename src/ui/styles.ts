@@ -163,20 +163,23 @@ export const CSS = `
 
   .notif-card {
     border-radius: 8px; padding: 0.875rem 1rem;
-    border: 1px solid #1a1a1a; border-left-width: 3px;
-    background: #0c0c0c;
+    border: 1px solid transparent;
     display: flex; flex-direction: column; gap: 0.35rem;
   }
-  .notif-incident    { border-left-color: rgba(248,113,113,0.35); }
-  .notif-maintenance { border-left-color: rgba(251,191,36,0.3); }
+  .notif-sev-critical    { background: rgba(239,68,68,0.07);    border-color: rgba(239,68,68,0.16); }
+  .notif-sev-partial     { background: rgba(249,115,22,0.07);   border-color: rgba(249,115,22,0.16); }
+  .notif-sev-degraded    { background: rgba(234,179,8,0.06);    border-color: rgba(234,179,8,0.14); }
+  .notif-sev-maintenance { background: rgba(59,130,246,0.06);   border-color: rgba(59,130,246,0.14); }
 
   .notif-head { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.1rem; }
 
   .notif-badge {
     font-size: 0.625rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
   }
-  .notif-badge-incident    { color: #f87171; }
-  .notif-badge-maintenance { color: #fbbf24; }
+  .notif-badge-critical    { color: #f87171; }
+  .notif-badge-partial     { color: #fb923c; }
+  .notif-badge-degraded    { color: #fbbf24; }
+  .notif-badge-maintenance { color: #60a5fa; }
 
   .notif-head-status { font-size: 0.6875rem; color: #484848; text-transform: capitalize; }
 

@@ -23,23 +23,23 @@ function explainCheck(check: CheckResult): { label: string; reason: string } {
   if (status === 'down') {
     if (!status_code) {
       if (latency_ms != null && latency_ms >= 4900) {
-        return { label: 'Down', reason: 'Request timed out — no response was received within the 5 second limit. This typically indicates a network-level issue or the server is not accepting connections.' };
+        return { label: 'Down', reason: 'Request timed out as no response was received within the 5 second limit. This typically indicates a network-level issue or the server is not accepting connections.' };
       }
       return { label: 'Down', reason: `Connection failed before a response could be received. Error: ${error ?? 'unknown'}.` };
     }
-    return { label: 'Down', reason: `Responded HTTP ${status_code} in ${latency_ms}ms. 5xx responses indicate a server-side error, so the service is classified as down.` };
+    return { label: 'Down', reason: `Responded HTTP ${status_code} in ${latency_ms}ms. 5xx responses indicate a server-side error, therefore the service is classified as down.` };
   }
 
   // degraded
   if (status_code && status_code >= 400) {
     return {
       label: 'Degraded',
-      reason: `Responded HTTP ${status_code} in ${latency_ms}ms. 4xx responses indicate a client or authentication issue at the endpoint being checked — the server is reachable but not behaving normally.`,
+      reason: `Responded HTTP ${status_code} in ${latency_ms}ms. 4xx responses indicate a client or authentication issue at the endpoint being checked. The server is reachable but not behaving normally.`,
     };
   }
   return {
     label: 'Degraded',
-    reason: `Responded HTTP ${status_code} in ${latency_ms}ms. The response was successful but took longer than the 3 second threshold, indicating slow or overloaded infrastructure.`,
+    reason: `Responded HTTP ${status_code} in ${latency_ms}ms. The response was successful but took longer than the 3 second threshold, indicating slow or overloaded infra.`,
   };
 }
 
@@ -70,28 +70,45 @@ function CheckRow({ check }: { check: CheckResult }) {
   );
 }
 
+type Severity = 'critical' | 'partial' | 'degraded' | 'maintenance';
+
+function getSeverity(type: string, impact: string): Severity {
+  if (type === 'maintenance') return 'maintenance';
+  const imp = (impact ?? '').toLowerCase();
+  if (imp === 'critical') return 'critical';
+  if (imp === 'major' || imp === 'high') return 'partial';
+  return 'degraded';
+}
+
+const SEV_LABEL: Record<Severity, string> = {
+  critical:    'Outage',
+  partial:     'Partial Outage',
+  degraded:    'Degraded',
+  maintenance: 'Maintenance',
+};
+
+const SEV_ICON: Record<Severity, string> = {
+  critical:    '▲',
+  partial:     '▲',
+  degraded:    '▲',
+  maintenance: '⚙',
+};
+
 function NotificationCard({ n }: { n: StatusNotification }) {
-  const impactLabels: Record<string, string> = {
-    none: 'No impact', minor: 'Minor', major: 'Major', critical: 'Critical',
-    low: 'Low', medium: 'Medium', high: 'High',
-  };
-  const impact = impactLabels[n.impact] ?? n.impact;
+  const sev = getSeverity(n.type, n.impact);
   const scheduledDate = n.scheduledFor
     ? new Date(n.scheduledFor).toUTCString().replace(':00 GMT', ' UTC')
     : null;
-  const icon = n.type === 'incident' ? '▲' : '⚙';
-  const label = n.type === 'incident' ? 'Incident' : 'Maintenance';
 
   return (
-    <div class={`notif-card notif-${n.type}`}>
+    <div class={`notif-card notif-sev-${sev}`}>
       <div class="notif-head">
-        <span class={`notif-badge notif-badge-${n.type}`}>{icon} {label}</span>
+        <span class={`notif-badge notif-badge-${sev}`}>{SEV_ICON[sev]} {SEV_LABEL[sev]}</span>
         <span class="notif-head-status">{n.status}</span>
       </div>
       <div class="notif-title">{n.title}</div>
       {n.body && <div class="notif-body">{n.body}</div>}
       <div class="notif-foot">
-        {impact !== 'No impact' && <span class="notif-foot-impact">{impact} impact</span>}
         {scheduledDate && <span class="notif-foot-scheduled">Scheduled {scheduledDate}</span>}
         <a href={n.url} class="notif-foot-link" target="_blank" rel="noopener">Details ↗</a>
       </div>
