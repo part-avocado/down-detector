@@ -69,6 +69,15 @@ export const CSS = `
   .service:hover { opacity: 0.65; }
   .section:last-of-type .service:last-child { border-bottom: none; }
 
+  .vendor-badge {
+    flex-shrink: 0; width: 0.75rem; text-align: center;
+    font-size: 0.5625rem; line-height: 1; visibility: hidden;
+  }
+  .vendor-badge-outage      { color: #f87171; visibility: visible; }
+  .vendor-badge-partial     { color: #fb923c; visibility: visible; }
+  .vendor-badge-degraded    { color: #fbbf24; visibility: visible; }
+  .vendor-badge-maintenance { color: #60a5fa; visibility: visible; }
+
   .sdot {
     width: 6px; height: 6px; border-radius: 50%;
     flex-shrink: 0; margin-top: 1px;
@@ -229,7 +238,7 @@ export const CSS = `
   .notif-foot-impact    { color: #3e3e3e; }
   .notif-foot-scheduled { color: #3e3e3e; }
   .notif-foot-link {
-    margin-left: auto; color: #424242; text-decoration: none; transition: color 0.1s;
+    margin-left: auto; color: #424242; text-decoration: none; transition: color 0.1s; cursor: pointer;
   }
   .notif-foot-link:hover { color: #888; }
 

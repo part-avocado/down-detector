@@ -1,11 +1,12 @@
 import type { HeroLevel } from '../impact-tiers';
 import { summarizeWorstImpact } from '../impact-tiers';
-import type { ServiceStatus } from '../types';
+import type { NotifLevel, ServiceStatus } from '../types';
 import { ServiceRow } from './components';
 import { CSS } from './styles';
 
 interface PageProps {
   statuses: ServiceStatus[];
+  notifLevels: Record<string, NotifLevel>;
   generatedAt: Date;
 }
 
@@ -94,7 +95,7 @@ function headlineForLevel(level: HeroLevel): string {
   }
 }
 
-export function StatusPage({ statuses, generatedAt }: PageProps) {
+export function StatusPage({ statuses, notifLevels, generatedAt }: PageProps) {
   const { level, orbClass: impactOrb, anyData } = summarizeWorstImpact(statuses);
   const orbClass = !anyData ? 'warn' : impactOrb;
   const headline = headlineForLevel(level);
@@ -139,7 +140,7 @@ export function StatusPage({ statuses, generatedAt }: PageProps) {
               <div class="section-label">{cat}</div>
               {statuses
                 .filter(s => s.service.category === cat)
-                .map(ss => <ServiceRow key={ss.service.id} ss={ss} />)}
+                .map(ss => <ServiceRow key={ss.service.id} ss={ss} notifLevel={notifLevels[ss.service.id]} />)}
             </div>
           ))}
           <div class="footer">

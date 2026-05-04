@@ -9,7 +9,7 @@ export const DEGRADED_LATENCY_MS = 5000;
 /** 4xx codes where the service is clearly reachable but rejecting our probe — classified as unsure rather than degraded. */
 export const UNSURE_STATUS_CODES = new Set([401, 403, 405, 429]);
 
-export async function checkService(service: Service): Promise<Omit<CheckResult, 'id'>> {
+async function probe(service: Service, method: 'HEAD' | 'GET'): Promise<Omit<CheckResult, 'id'>> {
   const checkedAt = Math.floor(Date.now() / 1000);
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), CHECK_TIMEOUT_MS);
@@ -17,7 +17,7 @@ export async function checkService(service: Service): Promise<Omit<CheckResult, 
 
   try {
     const response = await fetch(service.url, {
-      method: 'HEAD',
+      method,
       signal: controller.signal,
       redirect: 'follow',
       headers: { 'User-Agent': 'DownDetector/1.0' },
@@ -51,6 +51,15 @@ export async function checkService(service: Service): Promise<Omit<CheckResult, 
       error: err instanceof Error ? err.message : String(err),
     };
   }
+}
+
+export async function checkService(service: Service): Promise<Omit<CheckResult, 'id'>> {
+  const result = await probe(service, 'HEAD');
+  // HEAD was rejected or not supported — retry with GET for a real signal
+  if (result.status === 'unsure') {
+    return probe(service, 'GET');
+  }
+  return result;
 }
 
 export async function checkAllServices(services: Service[]): Promise<Omit<CheckResult, 'id'>[]> {
