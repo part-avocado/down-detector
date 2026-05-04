@@ -65,13 +65,17 @@ export const CSS = `
     border-bottom: 1px solid #161616;
     text-decoration: none; color: inherit;
     transition: opacity 0.15s;
+    position: relative;
   }
   .service:hover { opacity: 0.65; }
   .section:last-of-type .service:last-child { border-bottom: none; }
 
+  /* Sits in the .page left-padding gutter; out of the flex flow so rows align with section titles */
   .vendor-badge {
-    flex-shrink: 0; width: 0.75rem; text-align: center;
-    font-size: 0.5625rem; line-height: 1; visibility: hidden;
+    position: absolute; right: 100%; margin-right: 0.375rem;
+    top: 50%; transform: translateY(-50%);
+    font-size: 0.75rem; line-height: 1;
+    visibility: hidden; white-space: nowrap;
   }
   .vendor-badge-outage      { color: #f87171; visibility: visible; }
   .vendor-badge-partial     { color: #fb923c; visibility: visible; }
