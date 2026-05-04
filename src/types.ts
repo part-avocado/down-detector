@@ -1,5 +1,8 @@
 export type CheckStatus = 'up' | 'degraded' | 'down' | 'unsure';
 
+/** Strongest vendor-reported issue level for a service. */
+export type NotifLevel = 'outage' | 'partial' | 'degraded' | 'maintenance';
+
 export interface Service {
   id: string;
   name: string;

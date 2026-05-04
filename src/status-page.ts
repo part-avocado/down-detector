@@ -237,6 +237,33 @@ function parseGcp(data: GCPIncident[]): StatusNotification[] {
     });
 }
 
+// ── Severity helpers ──────────────────────────────────────────────────────────
+
+import type { NotifLevel } from './types';
+
+const LEVEL_RANK: Record<NotifLevel, number> = { outage: 4, partial: 3, degraded: 2, maintenance: 1 };
+
+function notifToLevel(n: StatusNotification): NotifLevel | null {
+  if (n.type === 'maintenance') return 'maintenance';
+  switch (n.impact) {
+    case 'critical': return 'outage';
+    case 'major':    return 'partial';
+    case 'minor':    return 'degraded';
+    case 'none':     return null;
+    default:         return 'degraded';
+  }
+}
+
+/** Returns the most severe active notification level, or null if none. */
+export function worstNotifLevel(notifications: StatusNotification[]): NotifLevel | null {
+  let worst: NotifLevel | null = null;
+  for (const n of notifications) {
+    const level = notifToLevel(n);
+    if (level && (!worst || LEVEL_RANK[level] > LEVEL_RANK[worst])) worst = level;
+  }
+  return worst;
+}
+
 // ── Public interface ──────────────────────────────────────────────────────────
 
 export async function fetchNotifications(serviceId: string): Promise<StatusNotification[]> {

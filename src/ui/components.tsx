@@ -1,4 +1,4 @@
-import type { CheckStatus, ServiceStatus } from '../types';
+import type { CheckStatus, NotifLevel, ServiceStatus } from '../types';
 
 function HistoryBars({ history }: { history: { status: CheckStatus }[] }) {
   // 10 slots: index 0 = oldest (left), index 9 = newest (right)
@@ -23,14 +23,26 @@ function timeAgo(ts: number): string {
   return `${Math.floor(secs / 3600)}h ago`;
 }
 
-export function ServiceRow({ ss }: { ss: ServiceStatus }) {
+const NOTIF_TITLE: Record<NotifLevel, string> = {
+  outage:      'Vendor reporting outage',
+  partial:     'Vendor reporting partial outage',
+  degraded:    'Vendor reporting degraded performance',
+  maintenance: 'Vendor reporting scheduled maintenance',
+};
+
+export function ServiceRow({ ss, notifLevel }: { ss: ServiceStatus; notifLevel?: NotifLevel }) {
   const { service, latest, history } = ss;
   const s = latest?.status ?? 'unknown';
   const metaText = s === 'down' ? 'Down'
     : latest?.latency_ms != null ? `${latest.latency_ms}ms`
     : '—';
+  const badgeChar = notifLevel === 'maintenance' ? '⚙' : '⚠';
   return (
     <a href={`/service/${service.id}`} class="service">
+      <span
+        class={`vendor-badge${notifLevel ? ` vendor-badge-${notifLevel}` : ''}`}
+        title={notifLevel ? NOTIF_TITLE[notifLevel] : undefined}
+      >{notifLevel ? badgeChar : ''}</span>
       <span class={`sdot ${s}`} />
       <span class="sname">{service.name}</span>
       <HistoryBars history={history} />

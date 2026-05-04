@@ -4,7 +4,8 @@ import { jsxRenderer } from 'hono/jsx-renderer';
 import type { CheckStatus, Env } from './types';
 import { buildServiceStatuses, getAllServices, getRecentChecks, getServiceById, insertChecks, pruneOldChecks } from './db';
 import { checkAllServices } from './checker';
-import { fetchNotifications } from './status-page';
+import { fetchNotifications, worstNotifLevel } from './status-page';
+import type { NotifLevel } from './types';
 import { StatusPage } from './ui/page';
 import { DetailPage } from './ui/detail';
 
@@ -17,7 +18,13 @@ app.use('/api/*', cors());
 
 app.get('/', async (c) => {
   const statuses = await buildServiceStatuses(c.env.DB);
-  return c.html('<!DOCTYPE html>' + <StatusPage statuses={statuses} generatedAt={new Date()} />);
+  const notifResults = await Promise.all(statuses.map(ss => fetchNotifications(ss.service.id)));
+  const notifLevels: Record<string, NotifLevel> = {};
+  statuses.forEach((ss, i) => {
+    const level = worstNotifLevel(notifResults[i]);
+    if (level) notifLevels[ss.service.id] = level;
+  });
+  return c.html('<!DOCTYPE html>' + <StatusPage statuses={statuses} notifLevels={notifLevels} generatedAt={new Date()} />);
 });
 
 app.get('/service/:id', async (c) => {
