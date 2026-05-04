@@ -229,7 +229,7 @@ export const CSS = `
   .notif-foot-impact    { color: #3e3e3e; }
   .notif-foot-scheduled { color: #3e3e3e; }
   .notif-foot-link {
-    margin-left: auto; color: #424242; text-decoration: none; transition: color 0.1s;
+    margin-left: auto; color: #424242; text-decoration: none; transition: color 0.1s; cursor: pointer;
   }
   .notif-foot-link:hover { color: #888; }
 
