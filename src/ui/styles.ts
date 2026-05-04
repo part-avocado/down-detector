@@ -76,6 +76,7 @@ export const CSS = `
   .sdot.up       { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,0.5); }
   .sdot.degraded { background: #f59e0b; box-shadow: 0 0 6px rgba(245,158,11,0.5); }
   .sdot.down     { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+  .sdot.unsure   { background: #94a3b8; box-shadow: 0 0 6px rgba(148,163,184,0.4); }
   .sdot.unknown  { background: #1e1e1e; }
 
   .sname { flex: 1; font-size: 0.9375rem; color: #b8b8b8; letter-spacing: -0.01em; }
@@ -85,6 +86,7 @@ export const CSS = `
   .bar.up       { background: #22c55e; }
   .bar.degraded { background: #f59e0b; }
   .bar.down     { background: #ef4444; }
+  .bar.unsure   { background: #94a3b8; }
   .bar.unknown  { background: #252525; }
 
   .smeta {
@@ -94,6 +96,7 @@ export const CSS = `
   .smeta.up       { color: #22c55e; }
   .smeta.degraded { color: #f59e0b; }
   .smeta.down     { color: #ef4444; }
+  .smeta.unsure   { color: #94a3b8; }
   .smeta.unknown  { color: #484848; }
 
   .sage { font-size: 0.6875rem; color: #525252; min-width: 4.5rem; text-align: right; white-space: nowrap; }
@@ -139,6 +142,7 @@ export const CSS = `
   .explain-label.up       { color: #22c55e; }
   .explain-label.degraded { color: #f59e0b; }
   .explain-label.down     { color: #ef4444; }
+  .explain-label.unsure   { color: #94a3b8; }
   .explain-label.unknown  { color: #2e2e2e; }
   .explain-reason { font-size: 0.875rem; color: #707070; line-height: 1.65; }
   .explain-rules {
@@ -170,6 +174,12 @@ export const CSS = `
     color: #b88a85;
   }
   .rule.rule-hit-down b { color: #f87171; }
+  .rule.rule-hit-unsure {
+    border-color: rgba(148,163,184,0.3);
+    background: rgba(148,163,184,0.06);
+    color: #8e9aaa;
+  }
+  .rule.rule-hit-unsure b { color: #94a3b8; }
 
   /* ── Search ── */
   .search-wrap { margin-bottom: 2rem; }
@@ -237,6 +247,7 @@ export const CSS = `
   .check-code.up       { color: #22c55e; }
   .check-code.degraded { color: #f59e0b; }
   .check-code.down     { color: #ef4444; }
+  .check-code.unsure   { color: #94a3b8; }
   .check-code.unknown  { color: #2a2a2a; }
   .check-latency {
     min-width: 3.5rem; color: #555;

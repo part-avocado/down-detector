@@ -6,6 +6,9 @@ export const CHECK_TIMEOUT_MS = 10000;
 /** Successful 2xx/3xx slower than this (edge-to-remote) counts as degraded. */
 export const DEGRADED_LATENCY_MS = 5000;
 
+/** 4xx codes where the service is clearly reachable but rejecting our probe — classified as unsure rather than degraded. */
+export const UNSURE_STATUS_CODES = new Set([401, 403, 405, 429]);
+
 export async function checkService(service: Service): Promise<Omit<CheckResult, 'id'>> {
   const checkedAt = Math.floor(Date.now() / 1000);
   const controller = new AbortController();
@@ -26,6 +29,8 @@ export async function checkService(service: Service): Promise<Omit<CheckResult, 
     let status: CheckStatus;
     if (statusCode >= 500) {
       status = 'down';
+    } else if (UNSURE_STATUS_CODES.has(statusCode)) {
+      status = 'unsure';
     } else if (statusCode >= 400 || latency >= DEGRADED_LATENCY_MS) {
       status = 'degraded';
     } else {

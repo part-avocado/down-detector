@@ -1,5 +1,5 @@
 import type { CheckResult, CheckStatus, Service } from '../types';
-import { CHECK_TIMEOUT_MS, DEGRADED_LATENCY_MS } from '../checker';
+import { CHECK_TIMEOUT_MS, DEGRADED_LATENCY_MS, UNSURE_STATUS_CODES } from '../checker';
 import type { StatusNotification } from '../status-page';
 import { getStatusPageUrl } from '../status-page';
 import { CSS } from './styles';
@@ -32,6 +32,13 @@ function explainCheck(check: CheckResult): { label: string; reason: string } {
       return { label: 'down(?)', reason: `Connection failed before a response could be received. Error: ${error ?? 'unknown'}.` };
     }
     return { label: 'down', reason: `Responded HTTP ${status_code} in ${latency_ms}ms. 5xx responses indicate a server-side error, therefore the service is classified as down.` };
+  }
+
+  if (status === 'unsure') {
+    return {
+      label: 'unsure',
+      reason: `responded with HTTP ${status_code} in ${latency_ms}ms. This code means the server is reachable and running, but it's intentionally rejecting our probe — so we can't confirm whether the service is healthy for real users.`,
+    };
   }
 
   // degraded
@@ -125,7 +132,7 @@ export function DetailPage({ service, checks, notifications, generatedAt }: Deta
   const explanation = latest ? explainCheck(latest) : null;
   const s = latest?.status ?? 'unknown';
   const ruleHit =
-    latest?.status === 'up' || latest?.status === 'degraded' || latest?.status === 'down'
+    latest?.status === 'up' || latest?.status === 'degraded' || latest?.status === 'down' || latest?.status === 'unsure'
       ? latest.status
       : null;
   const statusPageUrl = getStatusPageUrl(service.id);
@@ -176,6 +183,9 @@ export function DetailPage({ service, checks, notifications, generatedAt }: Deta
               </div>
               <div class={ruleHit === 'down' ? 'rule rule-hit rule-hit-down' : 'rule'}>
                 <b>down</b>: it does not work! D: the endpoint responds with a HTTP 5xx response code, experiences a connection error, or timed-out (no response within {timeoutSec} seconds).
+              </div>
+              <div class={ruleHit === 'unsure' ? 'rule rule-hit rule-hit-unsure' : 'rule'}>
+                <b>unsure</b>: the server is reachable but intentionally rejecting our probe (HTTP {[...UNSURE_STATUS_CODES].sort((a,b)=>a-b).join('/')}). we can't confirm the service is healthy for real users.
               </div>
               <div class="rule">checks run every 10 minutes via HTTP HEAD request</div>
             </div>

@@ -1,4 +1,4 @@
-export type CheckStatus = 'up' | 'degraded' | 'down';
+export type CheckStatus = 'up' | 'degraded' | 'down' | 'unsure';
 
 export interface Service {
   id: string;
