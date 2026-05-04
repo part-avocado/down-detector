@@ -245,13 +245,10 @@ const LEVEL_RANK: Record<NotifLevel, number> = { outage: 4, partial: 3, degraded
 
 function notifToLevel(n: StatusNotification): NotifLevel | null {
   if (n.type === 'maintenance') return 'maintenance';
-  switch (n.impact) {
-    case 'critical': return 'outage';
-    case 'major':    return 'partial';
-    case 'minor':    return 'degraded';
-    case 'none':     return null;
-    default:         return 'degraded';
-  }
+  const imp = (n.impact ?? '').toLowerCase();
+  if (imp === 'critical') return 'outage';
+  if (imp === 'major' || imp === 'high') return 'partial';
+  return 'degraded'; // mirrors getSeverity() in detail.tsx: 'minor', 'none', and anything else → degraded
 }
 
 /** Returns the most severe active notification level, or null if none. */
